@@ -48,7 +48,7 @@ class _MenuPageState extends State<MenuPage> {
       return MenuItem(
         name: data['field1'],
         description: data['field2'],
-        price: 0.0, // You can add a price field in your Firestore data
+        price: data['price'], // You can add a price field in your Firestore data
         isAvailable: data['isAvailable'] ?? true, // Include the availability status
       );
     }).toList();
