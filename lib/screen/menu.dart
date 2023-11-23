@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_demo/screen/home.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'food.dart';
@@ -91,22 +93,40 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Widget _buildDrawer() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text(
-              'Menu Options',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
+  // Get the current user
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+
+  // Check if the current user is an admin
+  bool isAdmin = currentUser?.email == 'admin@gmail.com';
+
+  return Drawer(
+    child: ListView(
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        DrawerHeader(
+          decoration: BoxDecoration(
+            color: Colors.blue,
+          ),
+          child: Text(
+            'Menu Options',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
             ),
           ),
+        ),
+        ListTile(
+          leading: Icon(Icons.restaurant_menu),
+          title: Text('Home'),
+          onTap: () {
+            Navigator.pop(context); // Close the drawer
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen(userEmail: currentUser?.email ?? '')),
+            );
+          },
+        ),
+        if (isAdmin) // Show only if the user is an admin
           ListTile(
             leading: Icon(Icons.restaurant_menu),
             title: Text('Food Menu'),
@@ -118,6 +138,7 @@ class _MenuPageState extends State<MenuPage> {
               );
             },
           ),
+        if (isAdmin) // Show only if the user is an admin
           ListTile(
             leading: Icon(Icons.local_drink),
             title: Text('Drink Menu'),
@@ -129,10 +150,11 @@ class _MenuPageState extends State<MenuPage> {
               );
             },
           ),
-        ],
-      ),
-    );
-  }
+      ],
+    ),
+  );
+}
+
 
   Widget _buildMenu(List<MenuItem> menu) {
   // Filter out items that are not available
