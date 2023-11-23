@@ -1,6 +1,6 @@
 # firebase_demo
 
-A new Flutter project.
+CRUD implementation with firebase
 
 ## Getting Started
 
