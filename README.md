@@ -1,16 +1,30 @@
-# firebase_demo
+# Firebase Flutter CRUD implementation
 
-CRUD implementation with firebase
+ICT602 - MOBILE TECHNOLOGY AND DEVELOPMENT
 
-## Getting Started
+Team member:
+1
+2
+3
+4
 
-This project is a starting point for a Flutter application.
+This Flutter app demonstrates a simple restaurant application with Firebase integration. It includes user authentication, menu management, and user profiles.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- User Authentication
+  - Sign up and login with Firebase Authentication
+  - Admin and normal user roles
+- Menu Management
+  - Display food and drink menu items
+  - Admin-only access to menu management
+- User Profile
+  - Users can update their profiles
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+
+
+
+
+
