@@ -25,7 +25,7 @@ This Flutter app demonstrates a simple restaurant application with Firebase inte
 
 The app includes basic CRUD (Create, Read, Update, Delete) operations. Here are snippets of the relevant code:
 
-### Create (Add) Operation
+### Create Operation
 
 ```dart
 // Create a user with email and password using Firebase Authentication
@@ -54,6 +54,42 @@ The app includes basic CRUD (Create, Read, Update, Delete) operations. Here are 
     }
   }
 ```
+```dart
+//create food item
+  Future<void> _addDataToFirestore(String data, double price) async {
+    try {
+      await _firestore.collection('makanan').add({
+        'field1': data,
+        'field2': 'food',
+        'isAvailable': true,
+        'price': price, // Add the price to the document
+      });
+      _textFieldController.clear();
+    } catch (e) {
+      print('Error adding data: $e');
+    }
+  }
+```
+```dart
+//create food item
+  Future<void> _addDataToFirestore(String data, double price) async {
+    try {
+      await _firestore.collection('makanan').add({
+        'field1': data,
+        'field2': 'food',
+        'isAvailable': true,
+        'price': price, // Add the price to the document
+      });
+      _textFieldController.clear();
+    } catch (e) {
+      print('Error adding data: $e');
+    }
+  }
+```
+
+### Read Operation
+### Update Operation
+### Delete Operation
 
 
 
