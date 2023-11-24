@@ -27,6 +27,7 @@ The app includes basic CRUD (Create, Read, Update, Delete) operations. Here are 
 
 ### Create Operation
 
+Create user account
 ```dart
 // Create a user with email and password using Firebase Authentication
       final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -54,6 +55,7 @@ The app includes basic CRUD (Create, Read, Update, Delete) operations. Here are 
     }
   }
 ```
+Create food item
 ```dart
 //create food item
   Future<void> _addDataToFirestore(String data, double price) async {
@@ -70,6 +72,7 @@ The app includes basic CRUD (Create, Read, Update, Delete) operations. Here are 
     }
   }
 ```
+Create drink item
 ```dart
 //create food item
   Future<void> _addDataToFirestore(String data, double price) async {
@@ -88,6 +91,67 @@ The app includes basic CRUD (Create, Read, Update, Delete) operations. Here are 
 ```
 
 ### Read Operation
+
+read user data
+```dart
+void initState() {
+    super.initState();
+    // Fetch the user's profile data from Firestore
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    try {
+      final DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(widget.user.uid).get();
+
+      if (userDoc.exists) {
+        final userProfile = userDoc.data() as Map<String, dynamic>;
+        setState(() {
+          nameController.text = userProfile['name'] ?? '';
+          mobileController.text = userProfile['mobile'] ?? '';
+        });
+      }
+    } catch (e) {
+      // Handle errors, e.g., display an error message
+      print('Error fetching user profile data: $e');
+    }
+  }
+```
+read menu item
+```dart
+ @override
+  void initState() {
+    super.initState();
+    // Fetch initial data
+    _loadMenuData();
+  }
+
+  Future<void> _loadMenuData() async {
+    await _loadMenu('makanan', foodMenu);
+    await _loadMenu('minuman', drinkMenu);
+  }
+
+  Future<void> _loadMenu(String collection, List<MenuItem> menu) async {
+  final firestore = FirebaseFirestore.instance;
+  firestore.collection(collection).snapshots().listen((snapshot) {
+    final menuItems = snapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      return MenuItem(
+        name: data['field1'],
+        description: data['field2'],
+        price: data['price'], 
+        isAvailable: data['isAvailable'] ?? true,
+      );
+    }).toList();
+
+    setState(() {
+      menu.clear();
+      menu.addAll(menuItems);
+    });
+  });
+```
+
 ### Update Operation
 ### Delete Operation
 
