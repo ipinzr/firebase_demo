@@ -386,7 +386,7 @@ Delete food menu
   }
 ```
 
-Delete food menu
+Delete drink menu
 ```dart
   Future<void> _deleteDataFromFirestore(String documentId) async {
     await _firestore.collection('minuman').doc(documentId).delete();
