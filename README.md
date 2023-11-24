@@ -3,9 +3,9 @@
 ICT602 - MOBILE TECHNOLOGY AND DEVELOPMENT
 
 Team member:
-1
-2
-3
+1 ipin
+2 man
+3 dan
 4
 
 This Flutter app demonstrates a simple restaurant application with Firebase integration. It includes user authentication, menu management, and user profiles.
@@ -18,6 +18,7 @@ This Flutter app demonstrates a simple restaurant application with Firebase inte
 - Menu Management
   - Display food and drink menu items
   - Admin-only access to menu management
+  - food/drink availability control
 - User Profile
   - Users can update their profiles
  
@@ -153,7 +154,248 @@ read menu item
 ```
 
 ### Update Operation
+
+Update user profile
+```dart
+Future<void> _updateUserProfile() async {
+    try {
+      await _firestore.collection('users').doc(widget.user.uid).set({
+        'name': nameController.text,
+        'mobile': mobileController.text,
+      }, SetOptions(merge: true));
+      // Handle successful update, e.g., show a confirmation message
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Profile updated successfully'),
+      ));
+    } catch (e) {
+      // Handle errors, e.g., display an error message
+      print('Error updating profile: $e');
+    }
+  }
+```
+
+Update food menu
+```dart
+Future<void> _updateDataInFirestore(String documentId, String currentField1, bool? isAvailable) async {
+    final TextEditingController _updateField1Controller = TextEditingController(text: currentField1);
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Update Data'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _updateField1Controller,
+                decoration: InputDecoration(labelText: 'New Field1 Value'),
+              ),
+              Text('Is Available: ${isAvailable ?? false}'), // Display the current availability status
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final updatedField1 = _updateField1Controller.text;
+                await _firestore.collection('makanan').doc(documentId).update({
+                  'field1': updatedField1,
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text('Update'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await _firestore.collection('makanan').doc(documentId).update({
+                  'isAvailable': !(isAvailable ?? false), // Toggle the availability status in Firestore
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text('Toggle Availability'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showPriceDialog(String documentId, double currentPrice) {
+    final TextEditingController _priceController = TextEditingController(text: currentPrice.toStringAsFixed(2));
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Change Price'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _priceController,
+                decoration: InputDecoration(labelText: 'New Price'),
+                keyboardType: TextInputType.number, // Allowing only numbers
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                final newPrice = double.tryParse(_priceController.text);
+                if (newPrice != null) {
+                  _updatePriceInFirestore(documentId, newPrice);
+                  Navigator.of(context).pop();
+                } else {
+                  // Handle invalid input or display a message to the user.
+                }
+              },
+              child: Text('Update Price'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _updatePriceInFirestore(String documentId, double newPrice) async {
+    await _firestore.collection('makanan').doc(documentId).update({
+      'price': newPrice,
+    });
+  }
+```
+Update drink menu
+```dart
+Future<void> _updateDataInFirestore(String documentId, String currentField1, bool? isAvailable) async {
+    final TextEditingController _updateField1Controller = TextEditingController(text: currentField1);
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Update Data'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _updateField1Controller,
+                decoration: InputDecoration(labelText: 'New Field1 Value'),
+              ),
+              Text('Is Available: ${isAvailable ?? false}'), // Display the current availability status
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final updatedField1 = _updateField1Controller.text;
+                await _firestore.collection('minuman').doc(documentId).update({
+                  'field1': updatedField1,
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text('Update'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await _firestore.collection('minuman').doc(documentId).update({
+                  'isAvailable': !(isAvailable ?? false), // Toggle the availability status in Firestore
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text('Toggle Availability'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showPriceDialog(String documentId, double currentPrice) {
+    final TextEditingController _priceController = TextEditingController(text: currentPrice.toStringAsFixed(2));
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Change Price'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _priceController,
+                decoration: InputDecoration(labelText: 'New Price'),
+                keyboardType: TextInputType.number, // Allowing only numbers
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                final newPrice = double.tryParse(_priceController.text);
+                if (newPrice != null) {
+                  _updatePriceInFirestore(documentId, newPrice);
+                  Navigator.of(context).pop();
+                } else {
+                  // Handle invalid input or display a message to the user.
+                }
+              },
+              child: Text('Update Price'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _updatePriceInFirestore(String documentId, double newPrice) async {
+    await _firestore.collection('minuman').doc(documentId).update({
+      'price': newPrice,
+    });
+  }
+```
+
 ### Delete Operation
+
+Delete food menu
+```dart
+  Future<void> _deleteDataFromFirestore(String documentId) async {
+    await _firestore.collection('makanan').doc(documentId).delete();
+  }
+```
+
+Delete food menu
+```dart
+  Future<void> _deleteDataFromFirestore(String documentId) async {
+    await _firestore.collection('minuman').doc(documentId).delete();
+  }
+```
+
+
+
+
 
 
 
