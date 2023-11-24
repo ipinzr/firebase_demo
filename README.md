@@ -28,21 +28,32 @@ The app includes basic CRUD (Create, Read, Update, Delete) operations. Here are 
 ### Create (Add) Operation
 
 ```dart
-// Example code for adding a new item
-Future<void> addItem(String itemName, double price) async {
-  final CollectionReference collection = FirebaseFirestore.instance.collection('items');
-  
-  try {
-    await collection.add({
-      'name': itemName,
-      'price': price,
-      // Add other fields as needed
-    });
-    print('Item added successfully');
-  } catch (e) {
-    print('Error adding item: $e');
+// Create a user with email and password using Firebase Authentication
+      final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        // Registration successful, show a snackbar
+        final snackBar = SnackBar(
+          content: Text('Registration successful. You can now log in.'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        // You can also navigate to the login screen
+        Navigator.pushReplacementNamed(context, '/login');
+      } else {
+        // Handle registration failure, if necessary
+      }
+    } catch (e) {
+      // Handle registration errors, e.g., display an error message
+      print('Registration error: $e');
+    }
   }
-}
+```
 
 
 
