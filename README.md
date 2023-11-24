@@ -2,12 +2,6 @@
 
 ICT602 - MOBILE TECHNOLOGY AND DEVELOPMENT
 
-Team member:
-1 ipin
-2 man
-3 dan
-4
-
 This Flutter app demonstrates a simple restaurant application with Firebase integration. It includes user authentication, menu management, and user profiles.
 
 ## Features
