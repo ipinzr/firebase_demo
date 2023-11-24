@@ -93,7 +93,7 @@ Create drink item
 
 ### Read Operation
 
-read user data
+Read user data
 ```dart
 void initState() {
     super.initState();
@@ -119,7 +119,7 @@ void initState() {
     }
   }
 ```
-read menu item
+Read menu item
 ```dart
  @override
   void initState() {
