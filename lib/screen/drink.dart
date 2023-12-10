@@ -10,6 +10,7 @@ class _DrinkPageState extends State<DrinkPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _textFieldController = TextEditingController();
 
+  //create drink item
   Future<void> _addDataToFirestore(String data, double price) async {
     try {
       await _firestore.collection('minuman').add({

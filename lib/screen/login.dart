@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'home.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,25 +14,59 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> login() async {
-  try {
-    await _auth.signInWithEmailAndPassword(
-      email: usernameController.text,
-      password: passwordController.text,
-    );
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: usernameController.text,
+        password: passwordController.text,
+      );
 
-    // Pass the user's email to the HomeScreen
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomeScreen(userEmail: usernameController.text),
-      ),
-    );
-  } catch (e) {
-    // Handle login errors, e.g., display an error message
-    print('Login error: $e');
+      // Pass the user's email to the HomeScreen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              HomeScreen(userEmail: usernameController.text),
+        ),
+      );
+    } catch (e) {
+      // Handle login errors, e.g., display an error message
+      print('Login error: $e');
+    }
   }
-}
 
+  Future<void> _handleGoogleSignIn() async {
+    try {
+      // Sign in with Google
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        // The user canceled the Google Sign-In process
+        return;
+      }
+
+      // Get Google Sign-In authentication details
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in with Firebase using Google credentials
+      await _auth.signInWithCredential(credential);
+
+      // Pass the user's email to the HomeScreen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              HomeScreen(userEmail: _auth.currentUser?.email ?? ""),
+        ),
+      );
+    } catch (e) {
+      print('Google Sign-In error: $e');
+    }
+  }
 
   void navigateToRegister() {
     // Navigate to the registration screen
@@ -73,9 +108,13 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               child: Text('Login'),
             ),
+            ElevatedButton(
+              onPressed: _handleGoogleSignIn,
+              child: Text('Login with Google'),
+            ),
             TextButton(
               onPressed: navigateToRegister,
-              child: Text(' Not register yet? Register here'),
+              child: Text('Not registered yet? Register here'),
             ),
           ],
         ),

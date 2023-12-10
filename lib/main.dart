@@ -30,7 +30,12 @@ class MyApp extends StatelessWidget {
       routes: {
         '/register': (context) => RegisterScreen(),
         '/login': (context) => LoginScreen(),
-        '/home': (context) => HomeScreen(userEmail: '',),
+        '/home': (context) {
+        final user = FirebaseAuth.instance.currentUser;
+        return user != null
+            ? HomeScreen(userEmail: user.email ?? '')
+            : LoginScreen();
+        },
         '/menu': (context) => MenuPage(),
         '/food': (context) => FoodPage(), // Define a named route for FoodPage
         '/drink': (context) => DrinkPage(), // Define a named route for DrinkPage

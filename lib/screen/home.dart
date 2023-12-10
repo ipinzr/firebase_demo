@@ -45,16 +45,21 @@ class HomeScreen extends StatelessWidget {
           children: <Widget>[
             CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage('https://posterspy.com/wp-content/uploads/2020/02/cpt-mrvl-new-xs.jpg'), // Add your user avatar image
+              backgroundImage: NetworkImage(
+                  'https://posterspy.com/wp-content/uploads/2020/02/cpt-mrvl-new-xs.jpg'),
             ),
             SizedBox(height: 20),
             Text(
               'Hello,',
               style: TextStyle(fontSize: 24),
             ),
-            Text(
-              '$userEmail',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                '$userEmail',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ),
             SizedBox(height: 40),
             ElevatedButton(

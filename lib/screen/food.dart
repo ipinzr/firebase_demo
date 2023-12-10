@@ -10,6 +10,7 @@ class _FoodPageState extends State<FoodPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _textFieldController = TextEditingController();
 
+  //create food item
   Future<void> _addDataToFirestore(String data, double price) async {
     try {
       await _firestore.collection('makanan').add({
